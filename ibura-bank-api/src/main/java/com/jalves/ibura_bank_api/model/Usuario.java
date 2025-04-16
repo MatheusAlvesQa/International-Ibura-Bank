@@ -35,4 +35,8 @@ public class Usuario {
 
     @Column(name = "telefone", length = 11)
     private String telefone;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @Column(name = "conta_id")
+    private Conta conta;
 }

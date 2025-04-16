@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import com.jalves.ibura_bank_api.enums.TipoTransacaoEnum;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -22,12 +23,16 @@ public class Transacao {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "conta_id")
+    @JoinColumn(name = "conta_id", nullable = false)
     private Conta conta;
 
     @Column(name = "valor", nullable = false)
     private BigDecimal valor;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false)
-    private String tipo;
+    private TipoTransacaoEnum tipo;
+
+    @Column(name = "data", nullable = false)
+    private LocalDateTime data;
 }
