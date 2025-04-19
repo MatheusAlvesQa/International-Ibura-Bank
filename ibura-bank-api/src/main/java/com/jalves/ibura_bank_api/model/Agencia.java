@@ -1,11 +1,13 @@
 package com.jalves.ibura_bank_api.model;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.jalves.ibura_bank_api.enums.NumeroAgenciasEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.jalves.ibura_bank_api.enums.NumeroAgenciasEnum;
 import java.util.List;
 
 @Entity
@@ -25,5 +27,6 @@ public class Agencia {
     private NumeroAgenciasEnum numero;
 
     @OneToMany(mappedBy = "agencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Conta> contas;
 }

@@ -4,6 +4,7 @@ import com.jalves.ibura_bank_api.model.Conta;
 import com.jalves.ibura_bank_api.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +23,23 @@ public class ContaService {
         return contaRepository.findById(id);
     }
 
-    public Conta save(Conta conta){
+    public Optional<Conta> findByNumero(String numero){
+        return contaRepository.findByNumero(numero);
+    }
+
+    @Transactional
+    public Conta save(Conta conta) {
+        conta.setId(null);
         return contaRepository.save(conta);
     }
 
-    public void deleteById(Long id){
-        contaRepository.deleteById(id);
+    @Transactional
+    public void deleteById(Long id) {
+        if (contaRepository.existsById(id)) {
+            contaRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Conta não encontrada");
+        }
     }
 
 }

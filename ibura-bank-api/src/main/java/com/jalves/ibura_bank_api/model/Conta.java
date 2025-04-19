@@ -1,5 +1,8 @@
 package com.jalves.ibura_bank_api.model;
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Getter
@@ -23,21 +24,32 @@ public class Conta {
     @Column(name= "id", unique = true)
     private Long id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
-    private Usuario usuario;
+    @Column(name = "nome", unique = true, nullable = false, length = 100)
+    private String nome;
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Transacao> transacoes;
+    @Column(name = "senha", nullable = false, length = 60)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String senha;
+
+    @Column(name = "cpf", unique = true, nullable = false, length = 11)
+    private String cpf;
+
+    @Column(name = "email", nullable = true)
+    private String email;
+
+    @Column(name = "telefone", length = 11)
+    private String telefone;
 
     @Column(name = "numero", nullable = false, unique = true)
     private String numero;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "agencia_id")
-    private Agencia agencia;
-
     @Column(name = "saldo")
     private BigDecimal saldo = BigDecimal.ZERO;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "agencia_id")
+    @JsonManagedReference
+    private Agencia agencia;
+
 
 }
